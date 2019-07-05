@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meshes>
+    <mesh ID="mesh-1">
+        <branch ID="branch-1">
+            <battery ID="battery-1" value="6"/>
+            <resistance ID="resistance-1" value="4000"/>
+            <resistance ID="resistance-2" value="8000"/>
+        </branch>
+    </mesh>
+</meshes>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<meshes>
+    <mesh ID="mesh-1">
+        <branch ID="branch-1">
+            <battery ID="battery-1" value="6"/>
+        </branch>
+        <branch ID="branch-2">
+            <resistance ID="resistance-1" value="4000"/>
+        </branch>
+        <branch ID="branch-3">
+            <resistance ID="resistance-2" value="8000"/>
+        </branch>
+    </mesh>
+    <mesh ID="mesh-2">
+        <branch ID="branch-3">
+            <resistance ID="resistance-2" value="8000"/>
+        </branch>
+        <branch ID="branch-4">
+            <battery ID="battery-2" value="-12"/>
+        </branch>
+        <branch ID="branch-5">
+            <battery ID="battery-3" value="2"/>
+            <resistance ID="resistance-3" value="2000"/>
+        </branch>
+    </mesh>
+    <mesh ID="mesh-3">
+        <branch ID="branch-2">
+            <resistance ID="resistance-1" value="4000"/>
+        </branch>
+        <branch ID="branch-4">
+            <battery ID="battery-2" value="12"/>
+        </branch>
+        <branch ID="branch-6">
+            <resistance ID="resistance-4" value="2000"/>
+            <battery ID="battery-4" value="-4"/>
+            <resistance ID="resistance-5" value="1000"/>
+            <resistance ID="resistance-6" value="500"/>
+        </branch>
+    </mesh>
+</meshes>
