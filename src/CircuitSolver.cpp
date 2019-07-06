@@ -1,10 +1,37 @@
+/* --------------------------------------------------------------------------------*\
+Copyright 2019 Víctor A Auñón
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. 
+\*--------------------------------------------------------------------------------*/
+
+/**
+ * @file CircuiSolver.cpp
+ * @author Víctor A. Auñón <hola@victoraunon.com>
+ *
+ * @section DESCRIPTION
+ * This file includes the implementation of the functions required
+ * to build and solve the circuit.
+ */
+
 #include "CircuitSolver.h"
 
 using namespace std;
 
 Mesh::Mesh(string t_ID, pugi::xml_node t_mesh) {
     cout << "\nCreating mesh with ID: " << t_ID << endl;
+    // Assign the mesh ID
     this->ID = t_ID;
+    // Read the elements in this mesh
     this->readElements(t_mesh);
 }
 
@@ -13,49 +40,60 @@ Mesh::~Mesh() {}
 
 
 void Mesh::readElements(pugi::xml_node t_mesh) {
+    // Create an iterator of branches
     vector<Branch>::iterator br;
 
     // Read the branches in this mesh
     for (auto branch : t_mesh.children("branch")) {
         if (branchesVector.size() == 0) {
+            // Always push this branch if the branchesVector is empty
             branchesVector.emplace_back(Branch{branch.attribute("ID").as_string()});
         } else {
+            // Look for this branch in the branchesVector
             bool ID_found = false;
             for (br = branchesVector.begin(); br != branchesVector.end(); br++) {
                 if (br->ID == branch.attribute("ID").as_string())
                     ID_found = true;
             }
+            // If this branch is not in the branchesVector yet, then push it
             if (!ID_found) {
                 branchesVector.emplace_back(Branch{branch.attribute("ID").as_string()});
             }
         }
-        // The branch ID is attached to its mesh
+        // The branch ID is always attached to the the mesh
         this->m_branchesIDs.push_back(branch.attribute("ID").as_string());
 
         // Read the batteries in this branch
         for (auto element : branch.children("battery")) {
+            // Update the mesh voltage
             this->m_powerSource += element.attribute("value").as_double();
             cout << "--> Found battery with ID: " << element.attribute("ID").as_string() << endl;
         }
 
         // Read the resistances in this branch
         for (auto element : branch.children("resistance")) {
+            // Look for this branch in the branchesVector
             for (br = branchesVector.begin(); br != branchesVector.end(); br++) {
                 if (br->ID == branch.attribute("ID").as_string()) {
-                    if (br->impedanceIDs.size() == 0) { 
+                    if (br->impedanceIDs.size() == 0) {
+                        // Always push this impedance if the impedanceIDs vector is empty
                         br->impedanceIDs.push_back(element.attribute("ID").as_string());
-                            br->branchImpedance += element.attribute("value").as_double();
-                            br->impedances.push_back(element.attribute("value").as_double());
+                        // Update the branch impedance
+                        br->branchImpedance += element.attribute("value").as_double();
+                        br->impedances.push_back(element.attribute("value").as_double());
                     } else {
+                        // Look for this impedance in the impedanceIDs vector
                         for (size_t i = 0; i < br->impedanceIDs.size(); i++) {
                             if (br->impedanceIDs[i] != element.attribute("ID").as_string()) {
+                                // Push this impedance to the branch
                                 br->impedanceIDs.push_back(element.attribute("ID").as_string());
+                                // Update the branch impedance
                                 br->branchImpedance += element.attribute("value").as_double();
                                 br->impedances.push_back(element.attribute("value").as_double());
                             }
                         }
                     }
-                    // Compute mesh impedance
+                    // Update the mesh impedance
                     this->m_impedance += element.attribute("value").as_double();
                     cout << "--> Found impedance with ID: " << element.attribute("ID").as_string() << endl;
                 }
@@ -97,17 +135,20 @@ System createSystem(vector<Mesh> &mVector, vector<Branch> &bVector) {
         }
         for (int index : ind){
             string common_branch = "";
-            // Find the common branch impedance
+            // Find the common branch impedance (elements outside the diagonal)
             for (auto br_i : mVector[i].getBranchesIDs()) {
                 for (auto br_n : mVector[index].getBranchesIDs()) {
                     if (br_n == br_i)
                         common_branch = br_n;
                 }
             }
+            // Look for the branch that matches the common_branch ID
             for (auto br : bVector) {
                 if (common_branch == br.ID) {
+                    // If a common branch exists, assign its impedance to the current element
                     impedance_matrix[i][index] -= br.branchImpedance;
                 } else if (common_branch == "") {
+                    // If there is not any common branch, assign a zero to the current element
                     impedance_matrix[i][index] -= 0.0;
                 }
             }
@@ -155,6 +196,7 @@ void setCurrents(vector<Mesh> &mVector, vector<Branch> &bVector, vector<double> 
 void saveToFile(vector<Mesh> &mVector, vector<Branch> &bVector, string &fileName) {
 
     ofstream results_file;
+    // Open the results file to write on it
     results_file.open(fileName);
 
     // Write to file
@@ -179,11 +221,13 @@ void saveToFile(vector<Mesh> &mVector, vector<Branch> &bVector, string &fileName
                          << branch.powerDissipated[i] << " (W)" << endl;
        }
     }
+    // Close the results file
     results_file.close();
 }
 
 
 int main(int argc, char *argv[]) {
+    // Check if a circuit file has been provided as an argument
     if (argv[1] != nullptr) {
         string input_file = argv[1];
 
@@ -202,10 +246,12 @@ int main(int argc, char *argv[]) {
                 cout << "Error offset: " << res.offset << endl;
                 system("pause");
             } else {
+                // Get the meshes XML node
                 pugi::xml_node meshes_node = xml_file.child("meshes");
 
                 // Read meshes
                 for(auto mesh_node : meshes_node.children("mesh")) {
+                    // Push this mesh to the meshesVector
                     meshesVector.push_back(Mesh(mesh_node.attribute("ID").as_string(), mesh_node));
                 }
 
