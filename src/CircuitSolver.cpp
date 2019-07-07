@@ -217,7 +217,7 @@ void saveToFile(vector<Mesh> &mVector, vector<Branch> &bVector, string &fileName
         results_file << "\nBranch with ID: " << branch.ID << ":" << endl;
         results_file << "--> Current: " << branch.current << " (A)" << endl;
         for(int i = 0; i < branch.impedanceIDs.size(); i++) {
-            results_file << "--> Power dissipated in " << branch.impedanceIDs[i] << ": " 
+            results_file << "--> Power dissipated by " << branch.impedanceIDs[i] << ": " 
                          << branch.powerDissipated[i] << " (W)" << endl;
        }
     }
@@ -247,7 +247,7 @@ int main(int argc, char *argv[]) {
                 system("pause");
             } else {
                 // Get the meshes XML node
-                pugi::xml_node meshes_node = xml_file.child("meshes");
+                pugi::xml_node meshes_node = xml_file.child("circuit");
 
                 // Read meshes
                 for(auto mesh_node : meshes_node.children("mesh")) {

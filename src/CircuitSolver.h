@@ -140,7 +140,7 @@ struct Branch {
     double branchImpedance;                 // The branch impedance (Ω)
     std::vector<std::string> impedanceIDs;  // The IDs of the impedances in the branch
     std::vector<double> impedances;         // The values of the impedances in the branch (Ω)
-    std::vector<double> powerDissipated;    // The resulting power dissipated in every impedance of the branch (W)
+    std::vector<double> powerDissipated;    // The resulting power dissipated by each impedance of the branch (W)
 };
 
 std::vector<Mesh> meshesVector;     // The vector of meshes
@@ -174,7 +174,7 @@ System createSystem(std::vector<Mesh> &t_meshesVector, std::vector<Branch> &t_br
 /*!
 * \brief Function that assigns the already calculated currents to each mesh and branch.
 * 
-* It also calculates the power dissipated in each impedance.
+* It also calculates the power dissipated by each impedance.
 * 
 * \param t_meshesVector The vector of meshes
 * \param t_branchesVector The vector of branches

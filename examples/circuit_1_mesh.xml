@@ -16,7 +16,7 @@ limitations under the License.
 -->
 <!-- This is a circuit with just one mesh. You can find the electric
  scheme in the circuit_1_mesh_scheme.png file -->
-<meshes>
+<circuit>
     <mesh ID="mesh-1">
         <branch ID="branch-1">
             <battery ID="battery-1" value="6"/>
@@ -24,4 +24,4 @@ limitations under the License.
             <resistance ID="resistance-2" value="8000"/>
         </branch>
     </mesh>
-</meshes>
+</circuit>

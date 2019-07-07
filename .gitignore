@@ -4,3 +4,5 @@
 !build/bin
 build/bin/*
 !build/bin/Release
+build/bin/Release/*
+!build/bin/Release/CircuitSolver.exe
