@@ -30,7 +30,7 @@ As an example, the following circuit, composed of two meshes, should be declared
 
 ![alt text](https://raw.githubusercontent.com/victor-aunon/CircuitSolver/master/examples/circuit_2_meshes_scheme.png "Two meshes circuit")
 
-```
+```XML
 <circuit>
     <mesh ID="mesh-1">
         <branch ID="branch-1">
